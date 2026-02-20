@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Holi | Raj Tiwari</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background:linear-gradient(-45deg,#ff0080,#ff8c00,#40e0d0,#8a2be2);
+    background-size:400% 400%;
+    animation:bgMove 8s infinite alternate;
+    color:white;
+    text-align:center;
+    perspective:1200px;
+}
+
+@keyframes bgMove{
+    0%{background-position:left top;}
+    100%{background-position:right bottom;}
+}
+
+/* Coder Name */
+.coder{
+    position:absolute;
+    bottom:10px;
+    font-size:14px;
+    opacity:0.8;
+}
+
+/* Welcome */
+#welcome{
+    font-size:40px;
+    text-shadow:0 0 20px yellow;
+    animation:blink 1.5s infinite alternate;
+}
+
+@keyframes blink{
+    from{opacity:1;}
+    to{opacity:0.6;}
+}
+
+/* Button */
+button{
+    padding:12px 25px;
+    margin-top:20px;
+    background:yellow;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* TIMER BOX */
+.timer-box{
+    margin-top:20px;
+    padding:15px 30px;
+    background:black;
+    border:3px solid #00ff00;
+    border-radius:12px;
+    box-shadow:0 0 15px #00ff00,0 0 30px #00ff00;
+    display:none;
+}
+
+#timer{
+    color:red;
+    font-size:22px;
+    animation:blinkTimer 1s infinite;
+}
+
+@keyframes blinkTimer{
+    0%,100%{opacity:1;}
+    50%{opacity:0.3;}
+}
+
+/* 3D Gift Box */
+.gift-scene{
+    display:none;
+    margin-top:30px;
+    transform-style:preserve-3d;
+    animation:rotateGift 6s infinite linear;
+}
+
+@keyframes rotateGift{
+    from{transform:rotateY(0deg);}
+    to{transform:rotateY(360deg);}
+}
+
+.gift{
+    width:120px;
+    height:120px;
+    background:linear-gradient(45deg,#ff4e50,#fc913a);
+    position:relative;
+    transform-style:preserve-3d;
+    border-radius:10px;
+    box-shadow:0 15px 30px rgba(0,0,0,0.4);
+}
+
+.lid{
+    position:absolute;
+    width:100%;
+    height:30px;
+    background:linear-gradient(45deg,#ff0000,#ff7300);
+    top:-30px;
+    border-radius:10px 10px 0 0;
+    transition:1s;
+}
+
+.open .lid{
+    transform:rotateX(120deg);
+    transform-origin:bottom;
+}
+
+/* Wish */
+#wish{
+    display:none;
+    margin-top:25px;
+    font-size:24px;
+    animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+    from{text-shadow:0 0 10px yellow;}
+    to{text-shadow:0 0 30px orange;}
+}
+
+/* 3D Gulal */
+.gulal{
+    position:absolute;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    animation:fall 4s linear infinite;
+}
+
+@keyframes fall{
+    0%{transform:translateY(-100px) rotateX(0deg);}
+    100%{transform:translateY(100vh) rotateX(360deg);}
+}
+
+/* Mouse Splash */
+.splash{
+    position:absolute;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    pointer-events:none;
+    animation:explode 1s forwards;
+}
+
+@keyframes explode{
+    0%{transform:scale(1);opacity:1;}
+    100%{transform:scale(5);opacity:0;}
+}
+
+</style>
+</head>
+
+<body>
+
+<h1 id="welcome">🌸 Welcome to Holi Celebration 🌸</h1>
+<button onclick="startHoli()">Enter</button>
+
+<div class="timer-box" id="timerBox">
+    <div id="timer"></div>
+</div>
+
+<div class="gift-scene" id="giftScene">
+    <div class="gift" id="gift">
+        <div class="lid"></div>
+    </div>
+</div>
+
+<div id="wish">
+🌈 Happy Holi To Everyone 🌈<br><br>
+Lots of Love to You, Your Family & Friends 💖<br><br>
+May your life be filled with colors of happiness, joy and prosperity! 🎨✨<br><br>
+🎶 Please listen to the Holi song fully and enjoy! 🎶<br><br>
+🌈 Happy Holi 🎉
+</div>
+
+<div class="coder">✨ Designed & Coded by Raj Tiwari ✨</div>
+
+<audio id="holiSong" loop>
+<source src="https://image2url.com/r2/default/audio/1771603413243-33842b3f-b942-432b-b30c-147c4b711023.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+let timeLeft=10;
+let countdown;
+
+function startHoli(){
+    document.getElementById("welcome").style.display="none";
+    document.querySelector("button").style.display="none";
+    document.getElementById("timerBox").style.display="block";
+    document.getElementById("giftScene").style.display="block";
+    document.getElementById("holiSong").play();
+    startTimer();
+}
+
+function startTimer(){
+    let timer=document.getElementById("timer");
+    countdown=setInterval(()=>{
+        timer.innerHTML="Opens in "+timeLeft+"s";
+        if(timeLeft<=0){
+            clearInterval(countdown);
+            openGift();
+        }
+        timeLeft--;
+    },1000);
+}
+
+function openGift(){
+    document.getElementById("gift").classList.add("open");
+    setTimeout(()=>{
+        document.getElementById("timerBox").style.display="none";
+        document.getElementById("giftScene").style.display="none";
+        document.getElementById("wish").style.display="block";
+        startGulal();
+    },1200);
+}
+
+/* Continuous 3D Gulal */
+const colors=["#ff0000","#ff7300","#fff700","#00ff00","#00f7ff","#ff00f7","#8a2be2"];
+
+function startGulal(){
+    setInterval(()=>{
+        let g=document.createElement("div");
+        g.classList.add("gulal");
+        g.style.left=Math.random()*100+"vw";
+        g.style.background=colors[Math.floor(Math.random()*colors.length)];
+        document.body.appendChild(g);
+        setTimeout(()=>{g.remove();},4000);
+    },120);
+}
+
+/* Mouse Splash */
+document.addEventListener("mousemove",e=>createSplash(e.pageX,e.pageY));
+document.addEventListener("touchmove",e=>{
+    const t=e.touches[0];
+    createSplash(t.pageX,t.pageY);
+});
+
+function createSplash(x,y){
+    let s=document.createElement("div");
+    s.classList.add("splash");
+    s.style.left=x+"px";
+    s.style.top=y+"px";
+    s.style.background=colors[Math.floor(Math.random()*colors.length)];
+    document.body.appendChild(s);
+    setTimeout(()=>{s.remove();},1000);
+}
+
+</script>
+
+</body>
+</html>
